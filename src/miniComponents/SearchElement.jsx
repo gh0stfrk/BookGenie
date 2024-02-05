@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 
+import { getBooks } from '../api/getBooks';
+
 // testing with dummy data
 import sampleBooks from '../dummy';
 
@@ -40,6 +42,11 @@ const SearchElement = ({ updateBookData }) => {
   ];
   
   const [placeholderText, setPlaceholderText] = useState("Type what are you thinking...")
+  const [userQuery, setuserQuery] = useState('')
+
+  const handleUserQuery = (e) => {
+    setuserQuery(e.target.value)
+  }
 
   const getRandomTextItem = () => {
     const randomIndex = Math.floor(Math.random() * textItems.length);
@@ -55,10 +62,13 @@ const SearchElement = ({ updateBookData }) => {
   }, []);
 
 
-  const getRecommendations = () => { 
-    updateBookData(sampleBooks)
-    console.log(sampleBooks)
-    alert("We are in Search element after the button click")
+  const getRecommendations = () => {
+    const books = getBooks(userQuery)
+    if (books.length === 0) {
+      alert('No books found')
+      return
+    }
+    updateBookData(books)
   }
 
   return (
@@ -67,6 +77,10 @@ const SearchElement = ({ updateBookData }) => {
         <textarea
           placeholder={placeholderText}
           className="w-96 h-32 border rounded p-2 mb-4"
+          required
+          value={userQuery}
+          onChange={handleUserQuery}
+          id='user-query'
         ></textarea>
         <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
         onClick={getRecommendations}
