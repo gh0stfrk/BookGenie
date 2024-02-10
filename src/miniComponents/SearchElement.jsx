@@ -64,11 +64,8 @@ const SearchElement = ({ updateBookData }) => {
 
   const getRecommendations = () => {
     const books = getBooks(userQuery)
-    if (books.length === 0) {
-      alert('No books found')
-      return
-    }
-    updateBookData(books)
+      updateBookData(books)
+      setuserQuery('')
   }
 
   return (

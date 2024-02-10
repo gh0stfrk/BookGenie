@@ -1,32 +1,11 @@
 import { GoogleAuthProvider } from 'firebase/auth';
 import { auth, provider } from "./googleSignIn/config"
 import { signInWithPopup } from "firebase/auth";
-import { useEffect, useState } from 'react';
 
-let api_url = "http://localhost:8000"
 
-function verifyToken(token){
-
-    fetch(api_url + "/api/v1/auth",
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Firebase-Key": `${token}`
-        },
-        body: JSON.stringify({
-            "user": "gh0st"
-        })
-    }
-    ).then(
-        (response) =>{
-            console.log(response)
-        }
-    ).catch(
-        (error)=>{
-            console.error(error)
-        }
-    )
+function storeToken(token){
+    localStorage.setItem("jwtToken", token)
+    localStorage.setItem("isLogged", true)
 }
 
 
@@ -37,14 +16,14 @@ function Authenticate(){
         .then((result) => {
             const credential = GoogleAuthProvider.credentialFromResult(result);
             console.log(credential.idToken)
-
-            verifyToken(credential.idToken)
+            auth.currentUser.getIdToken(true).then(token => {
+                console.log("token",token)
+                localStorage.setItem("idToken", token)
+            })
+            storeToken(credential.idToken)
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.email;
-            const credential = GoogleAuthProvider.credentialFromError(error);
+            console.error(error)
         }
         )
     }
