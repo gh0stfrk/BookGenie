@@ -1,8 +1,14 @@
-# React + Vite
+# BookGenie 🧞
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+BookGenie is a book recommender that suggests you books based on your thoughts and your ideas, ask for what you are thinking and the genie will suggest relevant books with magic.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project
+- This project was made to add some magic to my portfolio and while doing that this greatness was created 
+- Front-end is written with Javascript+React and the back-end is maintained in Python FastAPI.
+- Magic works by using the OpenAI's magical GPT model (our seceret sauce)
+
+## Contribute 
+- If you like this project and want to contribute to it, you are welcome to 
+
+

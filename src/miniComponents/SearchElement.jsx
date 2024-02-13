@@ -1,10 +1,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import axios from "axios";
+import Book from '../models';
+import { Spinner, Alert } from 'react-bootstrap';
 
-import { getBooks } from '../api/getBooks';
-
-// testing with dummy data
-import sampleBooks from '../dummy';
 
 const SearchElement = ({ updateBookData }) => {
 
@@ -44,6 +43,8 @@ const SearchElement = ({ updateBookData }) => {
   const [placeholderText, setPlaceholderText] = useState("Type what are you thinking...")
   const [userQuery, setuserQuery] = useState('')
 
+  const [loading, setLoading] = useState(false)
+
   const handleUserQuery = (e) => {
     setuserQuery(e.target.value)
   }
@@ -61,19 +62,71 @@ const SearchElement = ({ updateBookData }) => {
       return () => clearInterval(interval)
   }, []);
 
-
-  const getRecommendations = () => {
-    const books = getBooks(userQuery)
-      updateBookData(books)
-      setuserQuery('')
+  function getHeader(){
+    return {
+            JwtToken : localStorage.getItem("jwtToken"),
+            IdToken : localStorage.getItem("idToken"),
+            Dummy: "Not_A_Real_Request"
+    }
   }
 
+
+  function getRecommendations() {
+    if(userQuery == ""){
+      alert("Can't submit an empty request, write something in.")
+      return
+    }
+    updateBookData([])
+    try {
+        setLoading(true)
+        const query = userQuery
+        axios.post(
+          "http://localhost:8000/api/v1/books",
+          {
+              "query": query
+          },
+          {
+              headers : getHeader()
+          }
+      ).then((response) =>{
+          const listOfBooks = []
+
+          for(const book of response.data){
+              const newBook = new Book();
+              newBook.authorName = book.author_name;
+              newBook.bookName = book.book_name;
+              newBook.reason = book.reason;
+              newBook.coverPhoto = book.cover_image;
+              newBook.googleBooksLink = book.google_books_url;
+              newBook.pageCount = book.page_count;
+              newBook.isbn = book.isbn;
+
+              listOfBooks.push(newBook);
+          }
+          console.log(listOfBooks);
+          setLoading(false)
+          updateBookData(listOfBooks);
+      }).catch((error) =>{
+          setLoading(false)
+          alert(error);
+      })
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    } finally {
+      setuserQuery('');
+    }
+  }
+  
+
   return (
-    <section className="flex-1 flex items-center justify-center flex-col">
-      <div className="text-center flex items-center justify-center flex-col">
+    <section className="flex items-center justify-center flex-col my-5">
+      <div className="text-center flex items-center justify-center flex-col sm:">
+        <h1
+        className='font-bold my-2'
+        >Find your next best read 📚 </h1>
         <textarea
           placeholder={placeholderText}
-          className="w-96 h-32 border rounded p-2 mb-4"
+          className="w-30 sm:w-80 h-32 border rounded p-2 mb-4"
           required
           value={userQuery}
           onChange={handleUserQuery}
@@ -82,9 +135,16 @@ const SearchElement = ({ updateBookData }) => {
         <button className="bg-blue-500 text-white py-2 px-4 rounded mt-2"
         onClick={getRecommendations}
         >Suggest Books</button>
+        {loading &&  
+          <Spinner animation="border" role="status" className='my-4'>
+          <span className="visually-hidden py-4">Loading...</span>
+          </Spinner>
+        }
       </div>
     </section>
   );
+
+
 };
 
 export default SearchElement;
