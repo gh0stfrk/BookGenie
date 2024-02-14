@@ -66,6 +66,7 @@ const SearchElement = ({ updateBookData }) => {
     return {
             JwtToken : localStorage.getItem("jwtToken"),
             IdToken : localStorage.getItem("idToken"),
+            "Access-Control-Allow-Origin" : "*"
             // Dummy: "Not_A_Real_Request"
     }
   }
