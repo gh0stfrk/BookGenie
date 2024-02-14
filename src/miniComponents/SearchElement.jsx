@@ -66,7 +66,7 @@ const SearchElement = ({ updateBookData }) => {
     return {
             JwtToken : localStorage.getItem("jwtToken"),
             IdToken : localStorage.getItem("idToken"),
-            Dummy: "Not_A_Real_Request"
+            // Dummy: "Not_A_Real_Request"
     }
   }
 
@@ -81,7 +81,7 @@ const SearchElement = ({ updateBookData }) => {
         setLoading(true)
         const query = userQuery
         axios.post(
-          "http://localhost:8000/api/v1/books",
+          "https://bookgenie-backend.onrender.com/api/v1/books",
           {
               "query": query
           },

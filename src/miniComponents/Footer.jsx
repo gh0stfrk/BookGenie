@@ -11,6 +11,7 @@ const Footer = () => {
                 >
                     Contribute 🧞
                 </a>
+                
             </div>
         </div>
     </footer>
