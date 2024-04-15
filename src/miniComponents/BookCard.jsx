@@ -1,28 +1,77 @@
 // BookCard.js
 
-import React from 'react';
+import React from "react";
+import axios from "axios";
+import { useState } from "react";
+import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
 const BookCard = ({ book }) => {
-  const {authorName, bookName, reason, coverPhoto,isbn, googleBooksLink, pageCount, categories} = book;
+  const {
+    authorName,
+    bookName,
+    reason,
+    coverPhoto,
+    isbn,
+    googleBooksLink,
+    pageCount,
+    categories,
+  } = book;
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleFavourite = (status) => {
+    setIsFavorite(status);
+    const baseUrl = "http://localhost:8000/api/v1";
+    axios.post(
+      `${baseUrl}/favourite`,
+      {
+      isbn: isbn, 
+      status: status 
+      },
+      {
+        headers: {
+          Authorization: localStorage.getItem("Authorization"),
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    ).then((response) => {
+      alert(response.data.message)
+    }).catch((error)=> {
+      alert(error)
+    })
+  };
 
   return (
-    <div className="flex max-w-xs gap-2 bg-gray-100 p-3 rounded">
+    <div className="flex gap-3 bg-gray-50 p-3 rounded flex-col md:flex-row justify-between">
       <img
         src={coverPhoto}
-        className="object-contain max-w-24 self-start rounded"
+        className="object-contain md:self-start rounded self-center"
       />
-      <div className="flex flex-col gap-1 justify-between">
-        <p className="font-bold text-lg">{bookName}</p>
+      <div className="flex flex-col gap-0.5 max-w-2xl">
+        <p className="font-semibold text-lg">{bookName}</p>
         <div className="flex text-sm">
           <p>{authorName}</p>
         </div>
-        <div className="text-sm font-extralight my-2 h-">
-          {reason}
-        </div>
-        <a className="rounded bg-green-500 p-1 text-center"
-        href={googleBooksLink}
-        target='_blank'
-        >Google Books</a>
+        <div className="text-sm font-extralight">{reason}</div>
+      </div>
+      <div className="my-3 flex gap-2 md:self-end">
+        <a
+          className="block rounded p-1 text-white bg-black no-underline text-center w-fit px-4
+          self-center md:self-start"
+          href={googleBooksLink}
+          target="_blank"
+        >
+          Google Books
+        </a>
+        {isFavorite ? (
+          <MdFavorite
+            size={30}
+            className="text-red-500"
+            onClick={() => handleFavourite(false)}
+          />
+        ) : (
+          <MdFavoriteBorder size={30} onClick={() => handleFavourite(true)} />
+        )}
       </div>
     </div>
   );

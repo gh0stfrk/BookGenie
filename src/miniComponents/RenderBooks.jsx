@@ -4,18 +4,15 @@ import BookCard from './BookCard';
 
 
 const RenderBooks = ({books}) => {
-    
-    console.log("RenderBooks Called")
-
     return Array.isArray(books) && books.length > 0 ? (
-        <div className='flex flex-wrap -m-3 gap-3 p-5 justify-center'>
+        <div className='flex gap-3 p-5 flex-col'>
             {
                 books.map((book, index)=>(   
                 <BookCard key={index} book={book}/>))
             }
         </div>
       ) : (
-                <div className='flex flex-wrap -m-4 text-center'>
+                <div className='flex flex-wrap text-center'>
                 <h1>No Books Found</h1>
                 </div> 
         );

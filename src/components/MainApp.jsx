@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import RenderBooks from "../miniComponents/RenderBooks";
 import SearchElement from "../miniComponents/SearchElement";
+import Hero from "../miniComponents/Hero";
+import Footer from "../miniComponents/Footer";
 
 
 const MainApp = () => {
@@ -13,8 +15,12 @@ const MainApp = () => {
 
     return (
     <>
+    <div className="">
+      <Hero/>
       <SearchElement updateBookData={updateBooks} />
       {books.length > 0 && <RenderBooks books={books}/>}
+      <Footer/>
+    </div>
     </>
   );
 }

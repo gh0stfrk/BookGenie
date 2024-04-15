@@ -1,14 +1,12 @@
 import { react } from 'react';
 
-const Logout = () => {
+const Logout = (args) => {
     const handleLogout = () => {
-        localStorage.removeItem('idToken');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isLoggedIn');
+        localStorage.clear()
         window.location.reload();
     }
     return(
-        <button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full' onClick={handleLogout}>
+        <button className="border-none rounded-md py-2 px-4 text-sm" onClick={handleLogout}>
             Logout
         </button>
     )
