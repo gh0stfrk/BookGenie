@@ -3,9 +3,10 @@
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import { reauthenticateWithRefreshToken } from "../components/googleSignIn/refreshToken";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 
-const BookCard = ({ book }) => {
+const BookCard = ({ book, favouriteStatus=false }) => {
   const {
     authorName,
     bookName,
@@ -17,7 +18,14 @@ const BookCard = ({ book }) => {
     categories,
   } = book;
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(favouriteStatus);
+
+  const truncateString = (str, num) => {
+    if (str.length <= num) {
+      return str;
+    }
+    return str.slice(0, num) + "...";
+  }
 
   const handleFavourite = (status) => {
     setIsFavorite(status);
@@ -36,7 +44,11 @@ const BookCard = ({ book }) => {
       }
     ).then((response) => {
       alert(response.data.message)
+      if(response.status === 401){
+        reauthenticateWithRefreshToken()
+      }
     }).catch((error)=> {
+      reauthenticateWithRefreshToken()
       alert(error)
     })
   };
@@ -45,6 +57,7 @@ const BookCard = ({ book }) => {
     <div className="flex gap-3 bg-gray-50 p-3 rounded flex-col md:flex-row justify-between">
       <img
         src={coverPhoto}
+        width={150}
         className="object-contain md:self-start rounded self-center"
       />
       <div className="flex flex-col gap-0.5 max-w-2xl">
@@ -52,9 +65,9 @@ const BookCard = ({ book }) => {
         <div className="flex text-sm">
           <p>{authorName}</p>
         </div>
-        <div className="text-sm font-extralight">{reason}</div>
+        <div className="text-sm font-extralight">{truncateString(reason, 350)}</div>
       </div>
-      <div className="my-3 flex gap-2 md:self-end">
+      <div className="my-3 flex gap-2 justify-between md:self-end">
         <a
           className="block rounded p-1 text-white bg-black no-underline text-center w-fit px-4
           self-center md:self-start"

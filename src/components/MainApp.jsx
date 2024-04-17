@@ -4,6 +4,7 @@ import SearchElement from "../miniComponents/SearchElement";
 import Hero from "../miniComponents/Hero";
 import Footer from "../miniComponents/Footer";
 
+import PromotionalContent from "../miniComponents/PromotionalContent";
 
 const MainApp = () => {
     const [books, setBooks] = useState([])
@@ -19,6 +20,7 @@ const MainApp = () => {
       <Hero/>
       <SearchElement updateBookData={updateBooks} />
       {books.length > 0 && <RenderBooks books={books}/>}
+      <PromotionalContent/>
       <Footer/>
     </div>
     </>

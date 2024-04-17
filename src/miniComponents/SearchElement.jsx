@@ -4,6 +4,7 @@ import axios from "axios";
 import Book from "../models";
 import { Spinner, Alert } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { reauthenticateWithRefreshToken } from "../components/googleSignIn/refreshToken";
 
 const SearchElement = ({ updateBookData }) => {
   const textItems = [
@@ -67,7 +68,7 @@ const SearchElement = ({ updateBookData }) => {
     return {
       "Authorization": localStorage.getItem("Authorization"),
       "Access-Control-Allow-Origin": "*",
-      Dummy: "Not_A_Real_Request"
+      // Dummy: "Not_A_Real_Request"
     };
   }
 
@@ -95,6 +96,9 @@ const SearchElement = ({ updateBookData }) => {
           }
         )
         .then((response) => {
+          if(response.status === 401){
+            reauthenticateWithRefreshToken()
+          }
           const listOfBooks = [];
 
           for (const book of response.data) {

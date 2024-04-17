@@ -2,7 +2,7 @@ import { React } from 'react';
 
 const Footer = () => {
     return (
-    <footer className="footer flex p-4 justify-around gap-4 flex-col sm:flex-row">
+    <footer className="footer flex p-4 justify-around gap-4 flex-col sm:flex-row mt-10 mb-0">
         <div>
             <h1>BookGenie</h1>
             <p className='text-sm'>
